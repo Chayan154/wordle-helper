@@ -11,12 +11,21 @@ def open_words():
     return v_letter_words
 
 
-def includes(a, *b):
-    for i in b:
-        if i not in a:
-            return False
-    else:
-        return True
+def letter_data(b):
+    e_letters = []
+    i_letters = [[], []]
+    g_letters = [[], []]
+    for i in range(len(b)):
+        if(b[i] == '0'):
+            e_letters.append(b[i-1])
+        if(b[i] == '1'):
+            i_letters[0].append(b[i-1])
+            i_letters[1].append(int((i-1)/2))
+        if(b[i] == '2'):
+            g_letters[0].append(b[i-1])
+            g_letters[1].append(int((i-1)/2))
+
+    return e_letters, i_letters, g_letters
 
 
 def excludes(a, *b):
@@ -27,17 +36,15 @@ def excludes(a, *b):
         return True
 
 
+def includes(a, *b):
+    for j in range(len(b[0])):
+        if b[0][j] not in a or a[b[1][j]] == b[0][j]:
+            return False
+    else:
+        return True
+
+
 def matched_words1(a, *l):
-    words = []
-    for i in a:
-        if includes(i, *l):
-            words.append(i)
-        else:
-            pass
-    return words
-
-
-def matched_words2(a, *l):
     words = []
     for i in a:
         if excludes(i, *l):
@@ -47,25 +54,19 @@ def matched_words2(a, *l):
     return words
 
 
-def letter_data(b):
-    e_letters = []
-    i_letters = []
-    g_letters = []
-    for i in range(len(b)):
-        if(b[i] == '0'):
-            e_letters.append(b[i-1])
-        elif(b[i] == '1' or b[i] == '2'):
-            i_letters.append(b[i-1])
-        if(b[i] == '2'):
-            g_letters.append(b[i-1])
-            g_letters.append(int(((i-1)/2)))
-
-    return e_letters, i_letters, g_letters
+def matched_words2(a, *l):
+    words = []
+    for i in a:
+        if includes(i, *l):
+            words.append(i)
+        else:
+            pass
+    return words
 
 
 def isMatched(a, b):
-    for j in range(int(len(b)/2)):
-        if a[b[2*j+1]] != b[2*j]:
+    for j in range(len(b[0])):
+        if a[b[1][j]] != b[0][j]:
             return False
     else:
         return True
@@ -87,8 +88,8 @@ def wordle_helper():
         print('\n')
         word = input("Submit your inputs: ")
         a, b, c = letter_data(word)
-        m_words1 = matched_words1(final_words, *b)
-        m_words2 = matched_words2(m_words1, *a)
+        m_words1 = matched_words1(final_words, *a)
+        m_words2 = matched_words2(m_words1, *b)
         final_words = [w for w in m_words2 if isMatched(w, c)]
         print(final_words)
 
@@ -97,6 +98,4 @@ def wordle_helper():
 
 
 # Calling main function
-# wordle_helper()
-
 wordle_helper()
