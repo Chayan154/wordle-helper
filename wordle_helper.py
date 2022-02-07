@@ -1,8 +1,5 @@
 
 # creating functions
-from re import I
-
-
 def open_words():
     file = open("5_letter_words.txt", "r")
     data = file.read()
